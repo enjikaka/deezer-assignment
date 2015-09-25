@@ -48,99 +48,24 @@ body  {
     outline: none;
     transition: all 150ms ease;
    }
-
-  .autocomplete {
-    font-size: .7rem;
-    padding: 0 .75rem;
-    background-color: $black-two;
-    color: $faded-text;
-    margin-top: .5rem;
-    list-style: none;
-    position: absolute;
-    top:0;
-    left: 0;
-
-    li {
-      padding: .4rem 0;
-      transition: color 100ms ease;
-
-      &:not(:first-child) {
-        border-top: 1px solid $black-one;
-      }
-
-      &:hover {
-        color: $text;
-        cursor: pointer;
-      }
-    }
-  }
 }
 
-.search-suggestions {
-  font-size: .7rem;
-  padding: 0 .75rem;
-  background-color: $black-two;
-  color: $faded-text;
-  margin-top: .5rem;
-  margin-right: 5.65rem;
-  transform: translateY(-25%);
+.search-results {
   height: 0;
-  transition: all 250ms ease;
   overflow: hidden;
+  transition: all 250ms ease;
   opacity: 0;
 
   &.show {
-    padding: 1rem .75rem;
     transform: none;
     height: auto;
     opacity: 1;
   }
 
-  .autocomplete {
-    border:1px solid #999;
-    width:100%;
-    list-style:none;
-    font-size:12px;
-    overflow-x:hidden;
-    overflow-y:auto;
-    clear:both;
-  }
-
-  .autocomplete li {
-    cursor:pointer;
-    margin:0;
-    padding:5px;
-  }
-
-  .autocomplete li.selected {
-    background-color:#E1EFF9;
-  }
-
-  ul {
-    list-style: none;
-    padding-left: 1rem;
-
-    li {
-      padding: .4rem 0;
-      transition: color 100ms ease;
-
-      &:not(:first-child) {
-        border-top: 1px solid $black-one;
-      }
-
-      &:hover {
-        color: $text;
-        cursor: pointer;
-      }
-    }
-  }
-}
-
-.search-results {
   h2 {
     font-size: 1.1rem;
     font-weight: 400;
-    margin: .6rem 0;
+    margin: 1rem 0;
     padding: .4rem 0;
     border-bottom: 2px solid $black-two;
   }
@@ -230,9 +155,8 @@ body  {
     display: flex;
     flex-flow: row wrap;
     justify-content: stretch;
-    //align-items: center;
 
-    .album {
+    figure {
       margin: 1rem;
       display: flex;
       flex-direction: column;
@@ -248,6 +172,7 @@ body  {
         color: $blue;
         display: block;
         font-weight: 400;
+        max-width: 150px;
         margin-top: .8rem;
       }
     }

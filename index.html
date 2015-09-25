@@ -14,12 +14,12 @@
   </div>
 
   <div class="search-results">
-    <h2>Search Results for ""</h2>
+    <h2>Albums from </h2>
 
     <section class="albums">
       <h3>Albums</h3>
-      <div class="album-flow">
-        <figure class="album">
+      <div class="album-flow" id="albums">
+        <!--<figure class="album">
           <img src="http://lorempixel.com/150/150" alt="Cover art">
           <figcaption>Planet Earth</figcaption>
         </figure>
@@ -34,7 +34,7 @@
         <figure class="album">
           <img src="http://lorempixel.com/203/203" alt="Cover art">
           <figcaption>Planet Earth</figcaption>
-        </figure>
+        </figure>-->
       </div>
     </section>
 
@@ -88,6 +88,10 @@
   <script src="bower_components/jquery/dist/jquery.js"></script>
   <script src="bower_components/underscore/underscore.js"></script>
   <script src="bower_components/backbone/backbone.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/suggestions.js"></script>
+  <script src="js/albums.js"></script>
+  <script>
+    Backbone.history.start();
+  </script>
 </body>
 </html>
