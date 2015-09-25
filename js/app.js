@@ -50,7 +50,7 @@ var SuggestionView = Backbone.View.extend({
 var SuggestionsView = Backbone.View.extend({
   el: '#search',
   events: {
-    'keyup #search-input': 'fetchCollection'
+    'input #search-input': 'fetchCollection'
   },
   initialize: function(options) {
     this.options = options || {};
@@ -58,7 +58,7 @@ var SuggestionsView = Backbone.View.extend({
     this.render();
   },
   fetchCollection: function(event) {
-    var bannedKeycodes = [32, 40];
+    var bannedKeycodes = [32, 38, 40, 13, 9];
 
     if (bannedKeycodes.indexOf(event.keyCode) !== -1) {
       return;
@@ -89,10 +89,6 @@ var SuggestionsView = Backbone.View.extend({
 var suggestionsView = new SuggestionsView({model: new Suggestion()});
 Backbone.history.start();
 
-/*document.querySelector('.search-box button').addEventListener('click', function() {
-  console.log(albums);
-});
-
 document.querySelector('.search-results .album').addEventListener('click', function() {
   document.querySelector('.open-album').classList.toggle('show');
-});*/
+});
