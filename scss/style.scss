@@ -1,0 +1,255 @@
+$black-one: #1c1c1c;
+$black-two: #232323;
+$black-three: #2a2a2a;
+
+$faded-text: #919191;
+$text: #fff;
+
+$blue: #01ffff;
+$blue-text: #002142;
+
+body  {
+  background-color: $black-one;
+  font-family: 'Roboto', sans-serif;
+  margin: 3rem;
+  color: $text;
+}
+
+.search-box {
+  display: flex;
+  flex-flow: row nowrap;
+  position: relative;
+
+  input {
+    flex: 1;
+    background-color: $black-two;
+    border: none;
+    font-size: .9rem;
+    padding: .75rem;
+    font-family: 'Roboto', sans-serif;
+    color: $faded-text;
+    outline: none;
+
+    &:focus {
+      color: $text;
+    }
+  }
+
+   button {
+    font-family: 'Roboto', sans-serif;
+    text-transform: uppercase;
+    background-color: $blue;
+    color: $blue-text;
+    border: none;
+    padding: 0 1rem;
+    border-radius: 2px;
+    margin-left: 1rem;
+    cursor: pointer;
+    outline: none;
+    transition: all 150ms ease;
+   }
+
+  .autocomplete {
+    font-size: .7rem;
+    padding: 0 .75rem;
+    background-color: $black-two;
+    color: $faded-text;
+    margin-top: .5rem;
+    list-style: none;
+    position: absolute;
+    top:0;
+    left: 0;
+
+    li {
+      padding: .4rem 0;
+      transition: color 100ms ease;
+
+      &:not(:first-child) {
+        border-top: 1px solid $black-one;
+      }
+
+      &:hover {
+        color: $text;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.search-suggestions {
+  font-size: .7rem;
+  padding: 0 .75rem;
+  background-color: $black-two;
+  color: $faded-text;
+  margin-top: .5rem;
+  margin-right: 5.65rem;
+  transform: translateY(-25%);
+  height: 0;
+  transition: all 250ms ease;
+  overflow: hidden;
+  opacity: 0;
+
+  &.show {
+    padding: 1rem .75rem;
+    transform: none;
+    height: auto;
+    opacity: 1;
+  }
+
+  .autocomplete {
+    border:1px solid #999;
+    width:100%;
+    list-style:none;
+    font-size:12px;
+    overflow-x:hidden;
+    overflow-y:auto;
+    clear:both;
+  }
+
+  .autocomplete li {
+    cursor:pointer;
+    margin:0;
+    padding:5px;
+  }
+
+  .autocomplete li.selected {
+    background-color:#E1EFF9;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 1rem;
+
+    li {
+      padding: .4rem 0;
+      transition: color 100ms ease;
+
+      &:not(:first-child) {
+        border-top: 1px solid $black-one;
+      }
+
+      &:hover {
+        color: $text;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.search-results {
+  h2 {
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin: .6rem 0;
+    padding: .4rem 0;
+    border-bottom: 2px solid $black-two;
+  }
+
+  h3 {
+    font-weight: 400;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    color: $blue;
+  }
+
+  .open-album {
+    border-top: 2px solid $black-two;
+    padding-top: 2rem;
+    margin-top: 1rem;
+    transform: translateY(-25%);
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: all 250ms ease;
+
+    &.show {
+      transform: none;
+      opacity: 1;
+      height: auto;
+    }
+
+    .top {
+      display: flex;
+      flex-direction: row nowrap;
+      align-items: flex-start;
+      position: relative;
+      z-index: 10;
+
+      figure {
+        margin: 0 1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,.3);
+      }
+
+      h4 {
+        text-align: center;
+        color: $blue;
+        font-size: 1.3rem;
+        display: block;
+        font-weight: 400;
+        margin-top: .5rem;
+      }
+    }
+
+    .bottom {
+      position: relative;
+      z-index: 5;
+      transform: translateY(-75px);
+      background-color: $black-three;
+
+      table {
+        min-height: 200px;
+        padding: 1rem;
+        padding-left: calc(150px + 2rem);
+        width: 100%;
+        transform: translateY(-2.9rem);
+
+        thead {
+          th {
+            text-align: left;
+            font-weight: 400;
+          }
+        }
+
+        tbody {
+          font-weight: 300;
+          tr:first-child {
+            td {
+              padding-top: 1.5rem;
+            }
+          }
+          td {
+            border-bottom: 1px solid $black-one;
+            padding: .8rem 0;
+          }
+        }
+      }
+    }
+  }
+
+  .album-flow {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: stretch;
+    //align-items: center;
+
+    .album {
+      margin: 1rem;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+
+      img {
+        width: 150px;
+        height: 150px;
+      }
+
+      figcaption {
+        text-align: center;
+        color: $blue;
+        display: block;
+        font-weight: 400;
+        margin-top: .8rem;
+      }
+    }
+  }
+}
