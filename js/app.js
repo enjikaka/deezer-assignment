@@ -4,7 +4,7 @@
 
 */
 
-var Search = Backbone.Model.extend({
+var Suggestion = Backbone.Model.extend({
   idAttribute: "id",
   defaults: {
     id: null,
@@ -15,84 +15,78 @@ var Search = Backbone.Model.extend({
   }
 });
 
-var SearchCollection = Backbone.Collection.extend({
-  model: Search,
+var SuggestionCollection = Backbone.Collection.extend({
+  model: Suggestion,
   url: function() {
-     return "https://api.spotify.com/v1/search?q=" + this.query + "&type=artist";
+    return "https://api.spotify.com/v1/search?q=" + this.query + "&type=artist";
   },            
-  initialize: function(models, options) {
-     this.query = options.query;
+  initialize: function() {
+    this.query = '';
   },
   parse: function(response) {
-     var search = {};  
-     var self = this;
-     
-     $.map(response.artists.items, function(item) {
-        search.id = item.id;
-        search.name = item.name;
-        search.label = item.name;
-        search.infos = item.name;
-
-        self.push(search);
-     });
-     return this.models;
-  }
- });
-
-var SearchView = Backbone.View.extend({
-  el: '#search',
-  template: _.template($('#search-template').html(), {}),
-
-  events: {
-     'focus #search_input':    'autocomplete',
-     'keydown #search_input':  'updateData'
-  },
-
-  initialize: function() {
-     this.searchCollection = new SearchCollection([], {query: $('input[name=artist]').val()});
-     this.render();
-  },
-
-  render: function() {
-     this.$el.html(this.template(this.model.toJSON()));
-     return this;
-  },
-
-  updateData: function() {
-    console.debug('UD');
+    var suggestion = {};  
     var self = this;
 
-    this.searchCollection.query = $('input[name=artist]').val();
+    $.map(response.artists.items, function(item) {
+      suggestion.id = item.id;
+      suggestion.name = item.name;
 
-    self.searchCollection.fetch();
-
-    $('#search_input').unbind('keydown', function() {
-      self.updateData();
+      self.push(suggestion);
     });
-  },
 
-  autocomplete: function () {
-    var self = this;
-
-    //$('.search-suggestions').addClass('show');
-    //searchView.searchCollection.query = $('input[name=artist]').val();
-
-    $('#search_input').autocomplete({
-      collection: self.searchCollection,
-      attr: 'label',
-      noCase: true,
-      onselect: self.autocompleteSelect,
-      max_results: 15
-    });
-  },
-
-  autocompleteSelect: function(model) {
-    $('input[name=artist]').val(model.label());
+    return this.models;
   }
-
 });
 
-var searchView = new SearchView({model: new Search()});
+var SuggestionView = Backbone.View.extend({
+  tagName: 'option',
+  template: _.template('<%= name %>'),
+  render: function() {
+    this.$el.html(this.template(this.model.toJSON()));
+    return this;
+  }
+});
+
+var SuggestionsView = Backbone.View.extend({
+  el: '#search',
+  events: {
+    'keyup #search-input': 'fetchCollection'
+  },
+  initialize: function(options) {
+    this.options = options || {};
+    this.collection = new SuggestionCollection();
+    this.render();
+  },
+  fetchCollection: function(event) {
+    var bannedKeycodes = [32, 40];
+
+    if (bannedKeycodes.indexOf(event.keyCode) !== -1) {
+      return;
+    }
+
+    var self = this;
+    this.collection.query = $('#search-input').val();
+    if (this.collection.query === '') {
+      this.$el.find('#suggestions').html('');
+      return;
+    }
+    setTimeout(function() {
+      self.collection.fetch();
+      self.render();
+    }, 500);
+  },
+  render: function() {
+    this.$el.find('#suggestions').html('');
+    this.collection.each(function(suggestion) {
+      var suggestionView = new SuggestionView({ model: suggestion });
+      this.$el.find('#suggestions').append(suggestionView.render().el);
+    }, this);
+
+    return this;
+  }
+});
+
+var suggestionsView = new SuggestionsView({model: new Suggestion()});
 Backbone.history.start();
 
 /*document.querySelector('.search-box button').addEventListener('click', function() {
