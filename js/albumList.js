@@ -1,19 +1,11 @@
 /*
-
-  Models:
-  - Album
-
-  Views:
-  - AlbumView   (mono)
-  - AlbumsView  (poly)
   
-  Collections:
-  - AlbumCollection
+  Handles listing albums
 
 */
 
 
-var Album = Backbone.Model.extend({
+var AlbumList = Backbone.Model.extend({
   idAttribute: "id",
   defaults: {
     id: null,
@@ -28,24 +20,29 @@ var Album = Backbone.Model.extend({
   }
 });
 
-var AlbumCollection = Backbone.Collection.extend({
-  model: Album,
+var AlbumListCollection = Backbone.Collection.extend({
+  model: AlbumList,
   url: function() {
-    return 'https://api.spotify.com/v1/artists/' + this.artistId + '/albums';
+    return this.artistId;
+  },
+  sync: function(method, model) {
+    var self = this;
+
+    DZ.api('/artist/' + model.artistId + '/albums', function(response) {
+      self.parse(response);
+    });
   },            
   initialize: function(options, settings) {
     this.artistId = settings.artistId;
   },
   parse: function(response) {
-    console.log(response);
-
     var album = {};  
     var self = this;
 
-    $.map(response.items, function(item) {
+    $.map(response.data, function(item) {
       album.id = item.id;
-      album.name = item.name;
-      album.cover = item.images[0].url;
+      album.name = item.title;
+      album.cover = item.cover;
 
       self.push(album);
     });
@@ -54,7 +51,7 @@ var AlbumCollection = Backbone.Collection.extend({
   }
 });
 
-var AlbumView = Backbone.View.extend({
+var AlbumListView = Backbone.View.extend({
   tagName: 'figure',
   events: {
     'click': 'shout'
@@ -71,7 +68,7 @@ var AlbumView = Backbone.View.extend({
   }
 });
 
-var AlbumsView = Backbone.View.extend({
+var AlbumsListView = Backbone.View.extend({
   el: '#albums',
   initialize: function(options) {
     var self = this;
@@ -89,7 +86,7 @@ var AlbumsView = Backbone.View.extend({
     this.$el.className = 'album';
 
     this.collection.each(function(album) {
-      var albumView = new AlbumView({ model: album });
+      var albumView = new AlbumListView({ model: album });
       this.$el.append(albumView.render().el);
     }, this);
 
@@ -97,7 +94,7 @@ var AlbumsView = Backbone.View.extend({
   }
 });
 
-var albumsView;
+var albumListView;
 
 
 function getArtistIdFromName(name) {
@@ -110,8 +107,8 @@ $('#search button').on('click', function() {
   
   console.debug('Fetching albums from artist #' + artistId + ' ('+artistName+')');
   
-  albumsView = new AlbumsView({
-    collection: new AlbumCollection([], {
+  albumsListView = new AlbumsListView({
+    collection: new AlbumListCollection([], {
       artistId: artistId
     })
   });

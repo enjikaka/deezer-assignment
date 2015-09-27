@@ -1,6 +1,6 @@
 /*
-
-  I have never used backbone b4 lulz
+  
+  Handles fetching suggestions in the search bar
 
 */
 
@@ -18,8 +18,15 @@ var Suggestion = Backbone.Model.extend({
 var SuggestionCollection = Backbone.Collection.extend({
   model: Suggestion,
   url: function() {
-    return "https://api.spotify.com/v1/search?q=" + this.query + "&type=artist";
-  },            
+    return this.query;
+  },
+  sync: function(method, model) {
+    var self = this;
+
+    DZ.api('/search?q=artist:"' + encodeURIComponent(model.query) + '*"', function(response) {
+      self.parse(response);
+    });
+  }, 
   initialize: function() {
     this.query = '';
   },
@@ -27,9 +34,9 @@ var SuggestionCollection = Backbone.Collection.extend({
     var suggestion = {};  
     var self = this;
 
-    $.map(response.artists.items, function(item) {
-      suggestion.id = item.id;
-      suggestion.name = item.name;
+    $.map(response.data, function(item) {
+      suggestion.id = item.artist.id;
+      suggestion.name = item.artist.name;
 
       self.push(suggestion);
     });
@@ -87,5 +94,3 @@ var SuggestionsView = Backbone.View.extend({
     return this;
   }
 });
-
-var suggestionsView = new SuggestionsView({model: new Suggestion()});
