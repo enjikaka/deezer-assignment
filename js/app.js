@@ -1,10 +1,11 @@
 var suggestionsView;
 
-var appIdLocal = '164935';
+var appIdDev = '164935';
+var appIdProd = '164985';
 
 DZ.init({
-  appId: appIdLocal,
-  channelUrl: 'http://localhost:3000/channel.html'
+  appId: appIdProd,
+  channelUrl: 'http://enjikaka.github.com/deezer-assignment/channel.html'
 });
 
 DZ.login(function(response) {
