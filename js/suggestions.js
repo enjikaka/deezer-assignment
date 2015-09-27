@@ -24,7 +24,7 @@ var SuggestionCollection = Backbone.Collection.extend({
     var self = this;
 
     // Fetch suggestions from the Deezer API
-    DZ.api('/search?q=artist:"' + encodeURIComponent(model.query) + '*"', function(response) {
+    DZ.api('/search?q=artist:"' + encodeURIComponent(model.query) + ' * "', function(response) {
       self.parse(response);
     });
   }, 
