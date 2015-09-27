@@ -24,7 +24,7 @@ var SuggestionCollection = Backbone.Collection.extend({
     var self = this;
 
     // Fetch suggestions from the Deezer API
-    DZ.api('/search?q=artist:"' + encodeURIComponent(model.query) + ' * "', function(response) {
+    DZ.api('/search/autocomplete?q=' + encodeURIComponent(model.query), function(response) {
       self.parse(response);
     });
   }, 
@@ -35,9 +35,11 @@ var SuggestionCollection = Backbone.Collection.extend({
     var suggestion = {};  
     var self = this;
 
-    $.map(response.data, function(item) {
-      suggestion.id = item.artist.id;
-      suggestion.name = item.artist.name;
+    console.log(response);
+
+    $.map(response.artists.data, function(item) {
+      suggestion.id = item.id;
+      suggestion.name = item.name;
 
       self.push(suggestion);
     });
@@ -73,7 +75,7 @@ var SuggestionsView = Backbone.View.extend({
     document.location.hash = '';
   },
   fetchCollection: function(event) {
-    var bannedKeycodes = [32, 38, 40, 13, 9];
+    var bannedKeycodes = [32, 38, 40, 9, 8, 13];
 
     if (bannedKeycodes.indexOf(event.keyCode) !== -1) {
       return;
