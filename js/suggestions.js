@@ -23,6 +23,7 @@ var SuggestionCollection = Backbone.Collection.extend({
   sync: function(method, model) {
     var self = this;
 
+    // Fetch suggestions from the Deezer API
     DZ.api('/search?q=artist:"' + encodeURIComponent(model.query) + '*"', function(response) {
       self.parse(response);
     });
@@ -49,6 +50,7 @@ var SuggestionView = Backbone.View.extend({
   tagName: 'option',
   template: _.template('<%= name %>'),
   render: function() {
+    // Put the suggestions in the <datalist>
     this.$el.html(this.template(this.model.toJSON()));
     this.$el.attr('value', this.model.toJSON().name);
     this.$el.attr('label', this.model.toJSON().id);
@@ -59,12 +61,16 @@ var SuggestionView = Backbone.View.extend({
 var SuggestionsView = Backbone.View.extend({
   el: '#search',
   events: {
-    'input #search-input': 'fetchCollection'
+    'input #search-input': 'fetchCollection',
+    'focus #search-input': 'removeHash'
   },
   initialize: function(options) {
     this.options = options || {};
     this.collection = new SuggestionCollection();
     this.render();
+  },
+  removeHash: function() {
+    document.location.hash = '';
   },
   fetchCollection: function(event) {
     var bannedKeycodes = [32, 38, 40, 13, 9];

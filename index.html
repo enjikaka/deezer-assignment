@@ -7,43 +7,53 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="search-box" id="search">
-    <input type="text" id="search-input" list="suggestions" placeholder="Search Here">
-    <datalist id="suggestions"></datalist>
-    <button>Search</button>
+  <div class="audio-wrapper">
+    <audio autoplay id="audio" controls></audio>
+  </div>
+  <div class="site">
+
+    <!-- suggestionList.js controlls this div -->
+    <div class="search-box" id="search">
+      <input type="text" id="search-input" list="suggestions" placeholder="Search Here">
+      <datalist id="suggestions"></datalist>
+      <button>Search</button>
+   </div>
+
+    <div class="search-results">
+      <h2>Albums from </h2>
+
+      <section class="albums">
+        <h3>Albums</h3>
+        <!-- albumList.js controlls this div -->
+        <div class="album-flow" id="albums"></div>
+      </section>
+
+      <!-- trackList.js controlls this div -->
+      <div id="track-list" class="open-album"></div>
+    </div>
   </div>
 
-  <div class="search-results">
-    <h2>Albums from </h2>
 
-    <section class="albums">
-      <h3>Albums</h3>
-      <div class="album-flow" id="albums">
-        <!--<figure class="album">
-          <img src="http://lorempixel.com/150/150" alt="Cover art">
-          <figcaption>Planet Earth</figcaption>
-        </figure>
-        <figure class="album">
-          <img src="http://lorempixel.com/201/201" alt="Cover art">
-          <figcaption>Planet Earth</figcaption>
-        </figure>
-        <figure class="album">
-          <img src="http://lorempixel.com/202/202" alt="Cover art">
-          <figcaption>Planet Earth</figcaption>
-        </figure>
-        <figure class="album">
-          <img src="http://lorempixel.com/203/203" alt="Cover art">
-          <figcaption>Planet Earth</figcaption>
-        </figure>-->
-      </div>
-    </section>
+  <div id="dz-root"></div>
 
-    <div class="open-album">
-      <div class="top">
+  <!-- Libs and their dependencies -->
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/underscore/underscore.js"></script>
+  <script src="bower_components/backbone/backbone.js"></script>
+  <script src="https://cdns-files.deezer.com/js/min/dz.js"></script>
+
+  <!-- Backbone scripts -->
+  <script src="js/suggestions.js"></script>
+  <script src="js/trackList.js"></script>
+  <script src="js/albumList.js"></script>
+
+  <!-- Template for track list -->
+  <script type="text/template" id="tracklist-template">
+    <div class="top">
         <figure>
-          <img src="http://lorempixel.com/150/150">
+          <img src="<%= gs.album_cover %>" alt="<%= gs.album_name %>">
         </figure>
-        <h4>Planet Earth</h4>
+        <h4><%= gs.album_name %></h4>
       </div>
       <div class="bottom">
         <table>
@@ -51,67 +61,25 @@
             <tr>
               <th>#</th>
               <th>Title</th>
-              <th>Artist</th>
-              <th>Time</th>
+              <th>Duration</th>
               <th>Released</th>
+              <th>&nbsp;</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Planet Earth</td>
-              <td>Prince</td>
-              <td>4:34</td>
-              <td>2011</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Guitar</td>
-              <td>Prince</td>
-              <td>3:51</td>
-              <td>2011</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Somwhere Here On Earth</td>
-              <td>Prince</td>
-              <td>4:12</td>
-              <td>2011</td>
-            </tr>
-
+            <% _.each(gs.tracks.models, function(track){ %>
+              <tr>
+                <td><%= track.position %></td>
+                <td><%= track.name %></td>
+                <td><%= track.duration %></td>
+                <td><%= track.released %></td>
+                <td><button data-play="<%= track.preview %>">&#9654;</button></td>
+              </tr>
+            <% }); %>
           </tbody>
         </table>
       </div>
-    </div>
-  </div>
-
-
-  <div id="dz-root"></div>
-  <script src="bower_components/jquery/dist/jquery.js"></script>
-  <script src="bower_components/underscore/underscore.js"></script>
-  <script src="bower_components/backbone/backbone.js"></script>
-  <script src="https://cdns-files.deezer.com/js/min/dz.js"></script>
-  <script src="js/suggestions.js"></script>
-  <script src="js/albumList.js"></script>
-  <script src="js/album.js"></script>
-  <script src="js/app.js"></script>
-  <script>
-  var suggestionsView;
-
-    var appIdLocal = '164935';
-
-    DZ.init({
-      appId: appIdLocal,
-      channelUrl: 'http://localhost:3000/channel.html'
-    });
-
-    DZ.login(function(response) {
-      window.token = response.authResponse.accessToken;
-      DZ.api('/user/me', function(response) {
-        
-        suggestionsView = new SuggestionsView({model: new Suggestion()});
-      });
-    });
   </script>
+  <script src="js/app.js"></script>
 </body>
 </html>
