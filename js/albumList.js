@@ -41,7 +41,8 @@ var AlbumCollection = Backbone.Collection.extend({
     var album = {};  
     var self = this;
 
-    if (response === undefined) {
+    if (response.data.length < 1) {
+      alert('No albums found.');
       return;
     }
 
@@ -163,9 +164,10 @@ function getArtistIdFromName(name) {
   return $('#search option[value="'+name+'"]').attr('label');
 }
 
-$('#search button').on('click', function() {
+function searchButtonClick() {
   var artistName = $('#search input').val();
   var artistId = getArtistIdFromName(artistName);
+  $('.search-results').removeClass('show');
 
   if (!artistId) {
     return;
@@ -180,4 +182,6 @@ $('#search button').on('click', function() {
   });
 
   $('.search-results h2').text('Albums from ' + artistName);
-});
+}
+
+$('#search button').on('click', searchButtonClick);
