@@ -1,6 +1,6 @@
 /*
-
-  I have never used backbone b4 lulz
+  
+  Handles fetching suggestions in the search bar
 
 */
 
@@ -18,8 +18,16 @@ var Suggestion = Backbone.Model.extend({
 var SuggestionCollection = Backbone.Collection.extend({
   model: Suggestion,
   url: function() {
-    return "https://api.spotify.com/v1/search?q=" + this.query + "&type=artist";
-  },            
+    return this.query;
+  },
+  sync: function(method, model) {
+    var self = this;
+
+    // Fetch suggestions from the Deezer API
+    DZ.api('/search?q=artist:"' + encodeURIComponent(model.query) + '*"', function(response) {
+      self.parse(response);
+    });
+  }, 
   initialize: function() {
     this.query = '';
   },
@@ -27,9 +35,9 @@ var SuggestionCollection = Backbone.Collection.extend({
     var suggestion = {};  
     var self = this;
 
-    $.map(response.artists.items, function(item) {
-      suggestion.id = item.id;
-      suggestion.name = item.name;
+    $.map(response.data, function(item) {
+      suggestion.id = item.artist.id;
+      suggestion.name = item.artist.name;
 
       self.push(suggestion);
     });
@@ -42,6 +50,7 @@ var SuggestionView = Backbone.View.extend({
   tagName: 'option',
   template: _.template('<%= name %>'),
   render: function() {
+    // Put the suggestions in the <datalist>
     this.$el.html(this.template(this.model.toJSON()));
     this.$el.attr('value', this.model.toJSON().name);
     this.$el.attr('label', this.model.toJSON().id);
@@ -52,12 +61,16 @@ var SuggestionView = Backbone.View.extend({
 var SuggestionsView = Backbone.View.extend({
   el: '#search',
   events: {
-    'input #search-input': 'fetchCollection'
+    'input #search-input': 'fetchCollection',
+    'focus #search-input': 'removeHash'
   },
   initialize: function(options) {
     this.options = options || {};
     this.collection = new SuggestionCollection();
     this.render();
+  },
+  removeHash: function() {
+    document.location.hash = '';
   },
   fetchCollection: function(event) {
     var bannedKeycodes = [32, 38, 40, 13, 9];
@@ -87,5 +100,3 @@ var SuggestionsView = Backbone.View.extend({
     return this;
   }
 });
-
-var suggestionsView = new SuggestionsView({model: new Suggestion()});

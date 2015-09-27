@@ -15,6 +15,29 @@ body  {
   color: $text;
 }
 
+.site {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.audio-wrapper {
+  position: fixed;
+  background-color: $black-three;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 999;
+
+  audio {
+    margin: .5rem auto .8rem;
+    width: 100%;
+    max-width: 960px;
+    display: block;
+  }
+}
+
 .search-box {
   display: flex;
   flex-flow: row nowrap;
@@ -99,10 +122,17 @@ body  {
       align-items: flex-start;
       position: relative;
       z-index: 10;
+      max-width: 80%;
 
       figure {
         margin: 0 1rem;
         box-shadow: 0 2px 4px rgba(0,0,0,.3);
+        z-index: 30;
+
+        img {
+          width: 150px;
+          display: block;
+        }
       }
 
       h4 {
@@ -117,9 +147,30 @@ body  {
 
     .bottom {
       position: relative;
-      z-index: 5;
       transform: translateY(-75px);
       background-color: $black-three;
+
+      button {
+        cursor: pointer;
+        background-color: $blue;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        line-height: 1.8rem;
+        padding-left: 0.5rem;
+        width: 2rem;
+        height: 2rem;
+        color: $blue-text;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: .9;
+        transition: all 150ms ease;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
 
       table {
         min-height: 200px;
@@ -137,14 +188,24 @@ body  {
 
         tbody {
           font-weight: 300;
+          position: relative;
+          z-index: 15;
+
+          td {
+            border-bottom: 1px solid $black-one;
+            padding: .8rem 0;
+          }
+
           tr:first-child {
             td {
               padding-top: 1.5rem;
             }
           }
-          td {
-            border-bottom: 1px solid $black-one;
-            padding: .8rem 0;
+
+          tr:last-child {
+            td {
+              border-bottom: 0;
+            }
           }
         }
       }
