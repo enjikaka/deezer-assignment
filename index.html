@@ -74,7 +74,7 @@
                 <td><%= track.name %></td>
                 <td><%= track.duration %></td>
                 <td><%= albumReleased %></td>
-                <td><button class="material-icons" data-play="<%= track.preview %>">play_arrow</button></td>
+                <td><audio autoplay></audio><button class="material-icons" data-preview="<%= track.preview %>">play_arrow</button></td>
               </tr>
             <% }); %>
           </tbody>
