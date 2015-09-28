@@ -9,9 +9,6 @@ App.Model.Suggestion = Backbone.Model.extend({
   defaults: {
     id: null,
     name: null
-  },
-  name: function() {
-    return this.get('name');
   }
 });
 

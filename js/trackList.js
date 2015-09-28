@@ -12,18 +12,6 @@ App.Model.Track = Backbone.Model.extend({
     position: null,
     duration: null,
     preview: null
-  },
-  name: function() {
-    return this.get('name');
-  },
-  position: function() {
-    return this.get('position');
-  },
-  duration: function() {
-    return this.get('duration');
-  },
-  preview: function() {
-    return this.get('preview');
   }
 });
 

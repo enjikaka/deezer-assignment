@@ -12,12 +12,6 @@ App.Model.Album = Backbone.Model.extend({
     id: null,
     name: null,
     cover: null
-  },
-  name: function() {
-    return this.get('name');
-  },
-  cover: function() {
-    return this.get('cover');
   }
 });
 
