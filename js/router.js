@@ -1,8 +1,7 @@
 App.Router.Default = Backbone.Router.extend({
 	routes: {
     'artist/:id': 'getAlbums',
-    'album/:id': 'getAlbum',
-    '*actions': 'defaultRoute'
+    'album/:id': 'getAlbum'
   }
 });
 
@@ -23,8 +22,4 @@ App.Instance.appRouter.on('route:getAlbum', function(albumId) {
     }),
     albumId: albumId
   });
-});
-
-App.Instance.appRouter.on('route:defaultRoute', function(actions) {
-  console.log(actions);
 });

@@ -12,6 +12,18 @@ App.Model.Track = Backbone.Model.extend({
     position: null,
     duration: null,
     preview: null
+  },
+  name: function() {
+    return this.get('name');
+  },
+  position: function() {
+    return this.get('position');
+  },
+  duration: function() {
+    return this.get('duration');
+  },
+  preview: function() {
+    return this.get('preview');
   }
 });
 
@@ -32,11 +44,10 @@ App.Collection.Track = Backbone.Collection.extend({
     self.albumId = settings.albumId;
   },
   parse: function(response) {
+    var track = {};
     var self = this;
 
     $.map(response.data, function(item) {
-      var track = new App.Model.Track();
-
       track.id = item.id;
       track.name = item.title;
       track.position = item.track_position;
@@ -75,13 +86,12 @@ App.View.TrackList = Backbone.View.extend({
       albumName = response.title;
       albumCover = response.cover_medium;
       albumReleased = response.release_date.split('-')[0];
-      self.artist = response.artist.id;
 
       var viewData = {
         albumReleased: albumReleased,
         albumName: albumName,
         albumCover: albumCover,
-        tracks: self.collection
+        tracks: self.collection.toJSON()
       };
       
       self.render(viewData);
