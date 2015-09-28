@@ -1,21 +1,14 @@
-var suggestionsView;
-
-DZ.init({
-  appId: '164985',
-  channelUrl: 'http://enjikaka.github.com/deezer-assignment/channel.html'
-});
-
-/*
-DZ.init({
-  appId: '164935',
-  channelUrl: 'http://localhost:3000/channel.html'
-});
-*/
-
-DZ.login(function(response) {
-  window.token = response.authResponse.accessToken;
-  
-  DZ.api('/user/me', function(response) {
-    suggestionsView = new SuggestionsView({model: new Suggestion()});
-  });
-});
+window.App = {
+	Model: {},
+	View: {},
+	Collection: {},
+	Instance: {},
+	Router: {},
+	Util: {
+		formatTime: function(seconds) {
+			var date = new Date(1970,0,1);
+      date.setSeconds(seconds);
+      return date.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");
+		}
+	}
+};

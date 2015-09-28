@@ -4,7 +4,7 @@
 
 */
 
-var Track = Backbone.Model.extend({
+App.Model.Track = Backbone.Model.extend({
   idAttribute: "id",
   defaults: {
     id: null,
@@ -15,16 +15,22 @@ var Track = Backbone.Model.extend({
   }
 });
 
-var TrackCollection = Backbone.Collection.extend({
-  model: Track,
+App.Collection.Track = Backbone.Collection.extend({
+  model: App.Model.Track,
   initialize: function(data, settings) {
     this.push(data);
   }
 });
 
-var TrackListView = Backbone.View.extend({
+App.View.TrackList = Backbone.View.extend({
   el: '#track-list',
+  events: {
+    'click button[data-play]': 'togglePlay',
+    'click #history-back': 'goBack'
+  },
   initialize: function(viewData) {
+    this.audio = document.createElement('audio');
+
     this.viewData = viewData;
     this.render();
   },
@@ -35,16 +41,29 @@ var TrackListView = Backbone.View.extend({
     this.$el.html(template(this.viewData));
 
     // Add the class "show" to this Views' element
-    $('#track-list').addClass('show');
-
-    $('button[data-play]').on('click', function(event) {
-      var audio = $('#audio')[0];
-      audio.src = event.target.dataset.play;
-      audio.play();
-    });
+    this.$el.addClass('show');
 
     // Make the browser jump to the now visible trackview when it is out of the viewport
-    document.location.hash = '';
-    document.location.hash = '#track-list';
+    //document.location.hash = '';
+    //document.location.hash = '#track-list';
+  },
+  goBack: function(event) {
+    this.audio.pause();
+    window.history.back();
+  },
+  togglePlay: function(event) {
+    var button = event.target;
+    var audio = this.audio;
+    var icon;
+
+    if (audio.src !== event.target.dataset.play) {
+      audio.src = event.target.dataset.play;
+      audio.play();
+    } else {
+      audio.paused ? audio.play() : audio.pause();
+    }
+
+    icon = audio.paused ? 'play_arrow' : 'pause';
+    event.target.innerHTML = icon;
   }
 });

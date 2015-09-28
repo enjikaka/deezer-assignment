@@ -20,24 +20,6 @@ body  {
   margin: 0 auto;
 }
 
-.audio-wrapper {
-  position: fixed;
-  background-color: $black-three;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  z-index: 999;
-
-  audio {
-    margin: .5rem auto .8rem;
-    width: 100%;
-    max-width: 960px;
-    display: block;
-  }
-}
-
 .search-box {
   display: flex;
   flex-flow: row nowrap;
@@ -100,118 +82,6 @@ body  {
     color: $blue;
   }
 
-  .open-album {
-    border-top: 2px solid $black-two;
-    padding-top: 2rem;
-    margin-top: 1rem;
-    transform: translateY(-25%);
-    opacity: 0;
-    height: 0;
-    overflow: hidden;
-    transition: all 250ms ease;
-
-    &.show {
-      transform: none;
-      opacity: 1;
-      height: auto;
-    }
-
-    .top {
-      display: flex;
-      flex-direction: row nowrap;
-      align-items: flex-start;
-      position: relative;
-      z-index: 10;
-      max-width: 80%;
-
-      figure {
-        margin: 0 1rem;
-        box-shadow: 0 2px 4px rgba(0,0,0,.3);
-        z-index: 30;
-
-        img {
-          width: 150px;
-          display: block;
-        }
-      }
-
-      h4 {
-        text-align: center;
-        color: $blue;
-        font-size: 1.3rem;
-        display: block;
-        font-weight: 400;
-        margin-top: .5rem;
-      }
-    }
-
-    .bottom {
-      position: relative;
-      transform: translateY(-75px);
-      background-color: $black-three;
-
-      button {
-        cursor: pointer;
-        background-color: $blue;
-        border-radius: 50%;
-        font-size: 1.2rem;
-        line-height: 1.8rem;
-        padding-left: 0.5rem;
-        width: 2rem;
-        height: 2rem;
-        color: $blue-text;
-        border: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: .9;
-        transition: all 150ms ease;
-
-        &:hover {
-          opacity: 1;
-        }
-      }
-
-      table {
-        min-height: 200px;
-        padding: 1rem;
-        padding-left: calc(150px + 2rem);
-        width: 100%;
-        transform: translateY(-2.9rem);
-
-        thead {
-          th {
-            text-align: left;
-            font-weight: 400;
-          }
-        }
-
-        tbody {
-          font-weight: 300;
-          position: relative;
-          z-index: 15;
-
-          td {
-            border-bottom: 1px solid $black-one;
-            padding: .8rem 0;
-          }
-
-          tr:first-child {
-            td {
-              padding-top: 1.5rem;
-            }
-          }
-
-          tr:last-child {
-            td {
-              border-bottom: 0;
-            }
-          }
-        }
-      }
-    }
-  }
-
   .album-flow {
     display: flex;
     flex-flow: row wrap;
@@ -235,6 +105,124 @@ body  {
         font-weight: 400;
         max-width: 150px;
         margin-top: .8rem;
+      }
+    }
+  }
+}
+
+.track-list {
+  border-top: 2px solid $black-two;
+  padding-top: 2rem;
+  margin-top: 1rem;
+  transform: translateY(-25%);
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  transition: all 250ms ease;
+
+  #history-back {
+    background: none;
+    color: white;
+    border: 0;
+    margin-bottom: 1rem;
+  }
+
+  &.show {
+    transform: none;
+    opacity: 1;
+    height: auto;
+  }
+
+  .top {
+    display: flex;
+    flex-direction: row nowrap;
+    align-items: flex-start;
+    position: relative;
+    z-index: 10;
+    max-width: 80%;
+
+    figure {
+      margin: 0 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,.3);
+      z-index: 30;
+
+      img {
+        width: 150px;
+        display: block;
+      }
+    }
+
+    h4 {
+      text-align: center;
+      color: $blue;
+      font-size: 1.3rem;
+      display: block;
+      font-weight: 400;
+      margin-top: .5rem;
+    }
+  }
+
+  .bottom {
+    position: relative;
+    transform: translateY(-75px);
+    background-color: $black-three;
+
+    button {
+      cursor: pointer;
+      background-color: $blue;
+      border-radius: 50%;
+      line-height: 1.8rem;
+      width: 2rem;
+      height: 2rem;
+      color: $blue-text;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: .6;
+      outline: none;
+      transition: all 150ms ease;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    table {
+      //min-height: 200px;
+      padding: 1rem;
+      padding-left: calc(150px + 2rem);
+      width: 100%;
+      transform: translateY(-2.9rem);
+
+      thead {
+        th {
+          text-align: left;
+          font-weight: 400;
+        }
+      }
+
+      tbody {
+        font-weight: 300;
+        position: relative;
+        z-index: 15;
+
+        td {
+          border-bottom: 1px solid $black-one;
+          padding: .8rem 0;
+        }
+
+        tr:first-child {
+          td {
+            padding-top: 1.5rem;
+          }
+        }
+
+        tr:last-child {
+          td {
+            border-bottom: 0;
+          }
+        }
       }
     }
   }
