@@ -76,7 +76,7 @@ App.View.Suggestions = Backbone.View.extend({
     self.collection.bind('add', function() {
       self.render();
     });
-    self.render();
+    //self.render();
   },
   search: function(event) {
     var artistName = $('#search input').val();
@@ -112,10 +112,11 @@ App.View.Suggestions = Backbone.View.extend({
       return;
     }
 
-    setTimeout(function() {
+    /*setTimeout(function() {
       self.collection.fetch();
       self.render();
-    }, 400);
+    }, 400);*/
+    self.collection.fetch();
   },
   render: function() {
     this.$el.find('#suggestions').html('');

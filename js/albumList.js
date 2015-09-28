@@ -92,9 +92,8 @@ App.View.AlbumList = Backbone.View.extend({
       self.render();
       $('.search-results').addClass('show');
       if (App.Instance.trackListView !== undefined) {
-        App.Instance.trackListView.pauseAllAudios();
+        App.Instance.trackListView.pauseAudio();
       }
-      
     });
   },
   render: function() {
