@@ -4,7 +4,7 @@
 
 */
 
-var Suggestion = Backbone.Model.extend({
+App.Model.Suggestion = Backbone.Model.extend({
   idAttribute: "id",
   defaults: {
     id: null,
@@ -15,8 +15,8 @@ var Suggestion = Backbone.Model.extend({
   }
 });
 
-var SuggestionCollection = Backbone.Collection.extend({
-  model: Suggestion,
+App.Collection.Suggestion = Backbone.Collection.extend({
+  model: App.Model.Suggestion,
   url: function() {
     return this.query;
   },
@@ -35,8 +35,6 @@ var SuggestionCollection = Backbone.Collection.extend({
     var suggestion = {};  
     var self = this;
 
-    console.log(response);
-
     $.map(response.artists.data, function(item) {
       suggestion.id = item.id;
       suggestion.name = item.name;
@@ -48,7 +46,7 @@ var SuggestionCollection = Backbone.Collection.extend({
   }
 });
 
-var SuggestionView = Backbone.View.extend({
+App.View.Suggestion = Backbone.View.extend({
   tagName: 'option',
   template: _.template('<%= name %>'),
   render: function() {
@@ -60,19 +58,37 @@ var SuggestionView = Backbone.View.extend({
   }
 });
 
-var SuggestionsView = Backbone.View.extend({
+App.View.Suggestions = Backbone.View.extend({
   el: '#search',
   events: {
     'input #search-input': 'fetchCollection',
-    'focus #search-input': 'removeHash'
+    'focus #search-input': 'removeHash',
+    'click button': 'search'
   },
   initialize: function(options) {
     this.options = options || {};
-    this.collection = new SuggestionCollection();
+    this.collection = new App.Collection.Suggestion();
     this.render();
   },
   removeHash: function() {
     document.location.hash = '';
+  },
+  search: function() {
+    var artistName = $('#search input').val();
+    var artistId = getArtistIdFromName(artistName);
+    $('.search-results').removeClass('show');
+
+    if (!artistId) {
+      return;
+    }
+    
+    App.Instance.albumListView = new App.View.AlbumList({
+      collection: new App.Collection.Album([], {
+        artistId: artistId
+      })
+    });
+
+    $('.search-results h2').text('Albums from ' + artistName);
   },
   fetchCollection: function(event) {
     var bannedKeycodes = [32, 38, 40, 9, 8, 13];
@@ -95,10 +111,12 @@ var SuggestionsView = Backbone.View.extend({
   render: function() {
     this.$el.find('#suggestions').html('');
     this.collection.each(function(suggestion) {
-      var suggestionView = new SuggestionView({ model: suggestion });
+      var suggestionView = new App.View.Suggestion({ model: suggestion });
       this.$el.find('#suggestions').append(suggestionView.render().el);
     }, this);
 
     return this;
   }
 });
+
+App.Instance.suggestionsView;

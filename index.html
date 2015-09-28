@@ -5,12 +5,10 @@
   <meta charset="utf-8">
   <title>Deezer App</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,300,100" media="not all" onload="if (media != 'all')media='all'">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/icon?family=Material+Icons" media="not all" onload="if (media != 'all') media = 'all'">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="audio-wrapper">
-    <audio autoplay id="audio" controls></audio>
-  </div>
   <div class="site">
 
     <!-- suggestionList.js controlls this div -->
@@ -44,6 +42,7 @@
   <script src="https://cdns-files.deezer.com/js/min/dz.js"></script>
 
   <!-- Backbone scripts -->
+  <script src="js/app.js"></script>
   <script src="js/suggestions.js"></script>
   <script src="js/trackList.js"></script>
   <script src="js/albumList.js"></script>
@@ -52,9 +51,9 @@
   <script type="text/template" id="tracklist-template">
     <div class="top">
         <figure>
-          <img src="<%= gs.album_cover %>" alt="<%= gs.album_name %>">
+          <img src="<%= albumCover %>" alt="<%= albumName %>">
         </figure>
-        <h4><%= gs.album_name %></h4>
+        <h4><%= albumName %></h4>
       </div>
       <div class="bottom">
         <table>
@@ -68,19 +67,19 @@
             </tr>
           </thead>
           <tbody>
-            <% _.each(gs.tracks.models, function(track){ %>
+            <% _.each(tracks.models, function(track){ %>
               <tr>
                 <td><%= track.position %></td>
                 <td><%= track.name %></td>
                 <td><%= track.duration %></td>
                 <td><%= track.released %></td>
-                <td><button data-play="<%= track.preview %>">&#9654;</button></td>
+                <td><button class="material-icons" data-play="<%= track.preview %>">play_arrow</button></td>
               </tr>
             <% }); %>
           </tbody>
         </table>
       </div>
   </script>
-  <script src="js/app.js"></script>
+  <script src="js/setup.js"></script>
 </body>
 </html>

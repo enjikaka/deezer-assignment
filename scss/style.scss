@@ -20,24 +20,6 @@ body  {
   margin: 0 auto;
 }
 
-.audio-wrapper {
-  position: fixed;
-  background-color: $black-three;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  z-index: 999;
-
-  audio {
-    margin: .5rem auto .8rem;
-    width: 100%;
-    max-width: 960px;
-    display: block;
-  }
-}
-
 .search-box {
   display: flex;
   flex-flow: row nowrap;
@@ -154,9 +136,7 @@ body  {
         cursor: pointer;
         background-color: $blue;
         border-radius: 50%;
-        font-size: 1.2rem;
         line-height: 1.8rem;
-        padding-left: 0.5rem;
         width: 2rem;
         height: 2rem;
         color: $blue-text;
@@ -164,7 +144,8 @@ body  {
         display: flex;
         align-items: center;
         justify-content: center;
-        opacity: .9;
+        opacity: .6;
+        outline: none;
         transition: all 150ms ease;
 
         &:hover {

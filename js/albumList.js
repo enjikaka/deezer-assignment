@@ -4,10 +4,9 @@
 
 */
 
-var albumListView, trackListView, trackCollection;
-_.templateSettings.variable = 'gs'; // global scope
+//var albumListView, trackListView, trackCollection;
 
-var Album = Backbone.Model.extend({
+App.Model.Album = Backbone.Model.extend({
   idAttribute: "id",
   defaults: {
     id: null,
@@ -22,8 +21,8 @@ var Album = Backbone.Model.extend({
   }
 });
 
-var AlbumCollection = Backbone.Collection.extend({
-  model: Album,
+App.Collection.Album = Backbone.Collection.extend({
+  model: App.Model.Album,
   url: function() {
     return this.artistId;
   },
@@ -59,7 +58,7 @@ var AlbumCollection = Backbone.Collection.extend({
   }
 });
 
-var AlbumView = Backbone.View.extend({
+App.View.Album = Backbone.View.extend({
   tagName: 'figure',
   events: {
     'click': 'viewTrackList'
@@ -73,14 +72,14 @@ var AlbumView = Backbone.View.extend({
     // Create an object to put in the template
     // Create collection of Track Models
     var viewData = {
-      album_name: albumName,
-      album_cover: albumCover,
-      album_released: albumReleased,
-      tracks: new TrackCollection(trackList)
+      albumName: albumName,
+      albumCover: albumCover,
+      albumReleased: albumReleased,
+      tracks: new App.Collection.Track(trackList)
     };
 
     // Load the view
-    trackListView = new TrackListView(viewData);
+    App.Instance.trackList = new App.View.TrackList(viewData);
   },
   formatTime: function(seconds) {
     // seconds -> MM:SS
@@ -106,7 +105,7 @@ var AlbumView = Backbone.View.extend({
         // Loop through the respons
         _.forEach(trackResponse.data, function(item) {
           // Create a new istance of a Track Model.
-          var track = new Track();
+          var track = new App.Model.Track();
 
           track.id = item.id;
           track.name = item.title;
@@ -124,7 +123,7 @@ var AlbumView = Backbone.View.extend({
       });
     });
   },
-  template: _.template('<img src="<%= gs.cover %>" alt="<%= gs.name %>"><figcaption><%= gs.name %></figcaption>'),
+  template: _.template('<img src="<%= cover %>" alt="<%= name %>"><figcaption><%= name %></figcaption>'),
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
     this.$el.attr('value', this.model.toJSON().name);
@@ -133,7 +132,7 @@ var AlbumView = Backbone.View.extend({
   }
 });
 
-var AlbumListView = Backbone.View.extend({
+App.View.AlbumList = Backbone.View.extend({
   el: '#albums',
   initialize: function(options) {
     var self = this;
@@ -151,7 +150,7 @@ var AlbumListView = Backbone.View.extend({
     this.$el.className = 'album';
 
     this.collection.each(function(album) {
-      var albumView = new AlbumView({ model: album });
+      var albumView = new App.View.Album({ model: album });
       this.$el.append(albumView.render().el);
     }, this);
 
@@ -159,29 +158,6 @@ var AlbumListView = Backbone.View.extend({
   }
 });
 
-
 function getArtistIdFromName(name) {
   return $('#search option[value="'+name+'"]').attr('label');
 }
-
-function searchButtonClick() {
-  var artistName = $('#search input').val();
-  var artistId = getArtistIdFromName(artistName);
-  $('.search-results').removeClass('show');
-
-  if (!artistId) {
-    return;
-  }
-  
-  console.debug('Fetching albums from artist #' + artistId + ' ('+artistName+')');
-  
-  albumListView = new AlbumListView({
-    collection: new AlbumCollection([], {
-      artistId: artistId
-    })
-  });
-
-  $('.search-results h2').text('Albums from ' + artistName);
-}
-
-$('#search button').on('click', searchButtonClick);
