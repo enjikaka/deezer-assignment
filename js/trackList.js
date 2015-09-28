@@ -63,13 +63,11 @@ App.Collection.Track = Backbone.Collection.extend({
 
 App.View.TrackList = Backbone.View.extend({
   el: '#track-list',
-  events: {
-    'click button[data-preview]': 'togglePlay'
-  },
   initialize: function(settings) {
     var self = this;
 
     this.settings = settings || {};
+    this.audio = $('#audio')[0];
     this.collection = this.settings.collection;
     this.collection.fetch();
 
@@ -107,34 +105,60 @@ App.View.TrackList = Backbone.View.extend({
 
     // Add the class "show" to this Views' element
     this.$el.addClass('show');
+
+    // Add clickevents to the buttons
+    // The events property on App.View.TrackList 
+    // did not work properly
+    this.registerClickEvents();
   },
-  pauseAllAudios: function() {
-    $('audio').each(function(event) {
-      $(this)[0].pause();
+  registerClickEvents: function() {
+    var self = this;
+    $('#track-list button[data-preview]').each(function() {
+      $(this).on('click', self.togglePlay);
     });
   },
-  audioPause: function(event) {
-    var audio = $(event.target);
-    var button = $(event.target).siblings();
-    button.html('play_arrow');
-  },
-  audioStart: function(event) {
-    var audio = $(event.target);
-    var button = $(event.target).siblings();
-    button.html('pause');
+  pauseAudio: function() {
+    this.audio.pause();
+    $('#track-list button[data-preview]').each(function() {
+      if (!$(this).attr('disabled')) {
+        $(this).html('play_arrow');
+      }
+    });
   },
   togglePlay: function(event) {
+    var self = App.Instance.trackListView;
+
     var button = $(event.target);
-    var audio = $(event.target).siblings();
+    var audio = self.audio;
+
+    var src = button[0].dataset.preview;
+    
     button.html('cached');
-    if (audio[0].paused) {
-      this.pauseAllAudios();
-      audio[0].src = button[0].dataset.preview;
+
+    // If we did not click an already "playing button"
+    // then pause the audio and load the new MP3
+    if (audio.src !== src) {
+      self.pauseAudio();
+      audio.src = src;
+      button.html('pause');
+
+      // If the audio preview cannot load, then display error
+      // and diasable to button
+      $(audio).on('error', function() {
+        button.html('error_outline');
+        button.attr('disabled', 'true');
+      });
     } else {
-      audio[0].pause();
+      // Remove the error listener, we have a new button now!
+      $(audio).off('error');
+
+      if (audio.paused) {
+        audio.play();
+        button.html('pause');
+      } else {
+        audio.pause();
+        button.html('play_arrow');
+      }
     }
-    audio.on('pause', this.audioPause);
-    audio.on('ended', this.audioPause);
-    audio.on('playing', this.audioStart);
   }
 });
