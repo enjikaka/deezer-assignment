@@ -64,42 +64,41 @@ App.Collection.Track = Backbone.Collection.extend({
 App.View.TrackList = Backbone.View.extend({
   el: '#track-list',
   events: {
-    'click button[data-play]': 'togglePlay'
+    'click button[data-preview]': 'togglePlay'
   },
   initialize: function(settings) {
     var self = this;
 
-    this.audio = $('#audio')[0];
     this.settings = settings || {};
     this.collection = this.settings.collection;
     this.collection.fetch();
 
-    var albumName;
-    var albumCover;
-    var albumReleased;
+    this.collection.bind('add', function() {
+      var albumName;
+      var albumCover;
+      var albumReleased;
 
-    $('.search-results').removeClass('show');
+      $('.search-results').removeClass('show');
 
-    // Fetch information about the album to get the release year
-    DZ.api('/album/' + settings.albumId, function(response) {
-      
-      albumName = response.title;
-      albumCover = response.cover_medium;
-      albumReleased = response.release_date.split('-')[0];
+      // Fetch information about the album to get the release year
+      DZ.api('/album/' + settings.albumId, function(response) {
+        
+        albumName = response.title;
+        albumCover = response.cover_medium;
+        albumReleased = response.release_date.split('-')[0];
 
-      var viewData = {
-        albumReleased: albumReleased,
-        albumName: albumName,
-        albumCover: albumCover,
-        tracks: self.collection.toJSON()
-      };
-      
-      self.render(viewData);
+        var viewData = {
+          albumReleased: albumReleased,
+          albumName: albumName,
+          albumCover: albumCover,
+          tracks: self.collection.toJSON()
+        };
+        
+        self.render(viewData);
+      });
     });
   },
   render: function(viewData) {
-    console.log(viewData);
-
     // Fetch template from DOM
     var template = _.template($('#tracklist-template').html());
 
@@ -109,33 +108,33 @@ App.View.TrackList = Backbone.View.extend({
     // Add the class "show" to this Views' element
     this.$el.addClass('show');
   },
-  loadAndPlay: function(src, target) {
-    var audio = this.audio;
-    audio.src = src;
-    target.innerHTML = 'pause';
-    App.tmp.lastTarget = target;
+  pauseAllAudios: function() {
+    $('audio').each(function(event) {
+      $(this)[0].pause();
+    });
+  },
+  audioPause: function(event) {
+    var audio = $(event.target);
+    var button = $(event.target).siblings();
+    button.html('play_arrow');
+  },
+  audioStart: function(event) {
+    var audio = $(event.target);
+    var button = $(event.target).siblings();
+    button.html('pause');
   },
   togglePlay: function(event) {
-    var button = event.target;
-    var audio = this.audio;
-    var src = event.target.dataset.play;
-    var icon;
-
-    if (App.tmp.lastTarget && App.tmp.lastTarget !== event.target) {
-      App.tmp.lastTarget.innerHTML = 'play_arrow';
+    var button = $(event.target);
+    var audio = $(event.target).siblings();
+    button.html('cached');
+    if (audio[0].paused) {
+      this.pauseAllAudios();
+      audio[0].src = button[0].dataset.preview;
+    } else {
+      audio[0].pause();
     }
-
-    if (!audio.paused) {
-      audio.pause();
-      App.tmp.lastTarget.innerHTML = 'play_arrow';
-      if (App.tmp.lastTarget !== event.target) {
-        this.loadAndPlay(src, event.target);
-      }
-    }
-    else {
-      this.loadAndPlay(src, event.target);
-      App.tmp.lastTarget = event.target;
-      event.target.innerHTML = 'pause';
-    }
+    audio.on('pause', this.audioPause);
+    audio.on('ended', this.audioPause);
+    audio.on('playing', this.audioStart);
   }
 });
