@@ -11,13 +11,12 @@ $blue-text: #002142;
 body  {
   background-color: $black-one;
   font-family: 'Roboto', sans-serif;
-  margin: 3rem;
   color: $text;
 }
 
 .site {
   max-width: 960px;
-  margin: 0 auto;
+  margin: 3rem auto;
 }
 
 .search-box {
@@ -111,7 +110,6 @@ body  {
 }
 
 .track-list {
-  border-top: 2px solid $black-two;
   padding-top: 2rem;
   margin-top: 1rem;
   transform: translateY(-25%);
@@ -224,6 +222,44 @@ body  {
             border-bottom: 0;
           }
         }
+      }
+    }
+  }
+}
+
+@media (max-width: 800px)  {
+  .site {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .track-list {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+    
+    .top {
+      position: static;
+      z-index: 10;
+      max-width: 100%;
+      margin-bottom: 2rem;
+      align-items: center;
+
+      h4 {
+        font-size: 1.2rem;
+      }
+    }
+
+    .bottom {
+      position: static;
+      transform: none;
+
+      table {
+        font-size: .8rem;
+        padding: 0.5rem;
+        width: 100%;
+        transform: none;
+        margin: 0;
       }
     }
   }
