@@ -66,21 +66,35 @@ App.View.Suggestions = Backbone.View.extend({
   el: '#search',
   events: {
     'input #search-input': 'fetchCollection',
+    'keyup #search-input': 'search',
     'click button': 'search'
   },
   initialize: function(options) {
-    this.options = options || {};
-    this.collection = new App.Collection.Suggestion();
-    this.render();
+    var self = this;
+    self.options = options || {};
+    self.collection = new App.Collection.Suggestion();
+    self.collection.bind('add', function() {
+      self.render();
+    });
+    self.render();
   },
-  search: function() {
+  search: function(event) {
     var artistName = $('#search input').val();
     var artistId = $('#search option[value="'+artistName+'"]').attr('label');
-    $('.search-results').removeClass('show');
+
+    if (event.keyCode) {
+      if (event.keyCode !== 13) {
+
+      } else if (event.keyCode === 13) {
+        $('#search input').blur();
+      }
+    }
 
     if (!artistId) {
       return;
     }
+
+    $('.search-results').removeClass('show');
 
     App.Instance.appRouter.navigate('/artist/' + artistId, {trigger: true});
   },
