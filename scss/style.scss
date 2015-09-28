@@ -120,13 +120,6 @@ body  {
   overflow: hidden;
   transition: all 250ms ease;
 
-  #history-back {
-    background: none;
-    color: white;
-    border: 0;
-    margin-bottom: 1rem;
-  }
-
   &.show {
     transform: none;
     opacity: 1;
