@@ -100,6 +100,10 @@ App.View.TrackList = Backbone.View.extend({
     // Add the class "show" to this Views' element
     this.$el.addClass('show');
   },
+  goBack: function(event) {
+    this.audio.pause();
+    window.history.back();
+  },
   loadAndPlay: function(src, target) {
     var audio = this.audio;
     audio.src = src;
