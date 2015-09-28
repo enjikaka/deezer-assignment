@@ -53,8 +53,7 @@ App.Collection.Track = Backbone.Collection.extend({
 App.View.TrackList = Backbone.View.extend({
   el: '#track-list',
   events: {
-    'click button[data-play]': 'togglePlay',
-    'click #history-back': 'goBack'
+    'click button[data-play]': 'togglePlay'
   },
   initialize: function(settings) {
     var self = this;
@@ -99,10 +98,6 @@ App.View.TrackList = Backbone.View.extend({
 
     // Add the class "show" to this Views' element
     this.$el.addClass('show');
-  },
-  goBack: function(event) {
-    this.audio.pause();
-    window.history.back();
   },
   loadAndPlay: function(src, target) {
     var audio = this.audio;
