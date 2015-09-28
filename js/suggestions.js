@@ -75,20 +75,14 @@ App.View.Suggestions = Backbone.View.extend({
   },
   search: function() {
     var artistName = $('#search input').val();
-    var artistId = getArtistIdFromName(artistName);
+    var artistId = $('#search option[value="'+artistName+'"]').attr('label');
     $('.search-results').removeClass('show');
 
     if (!artistId) {
       return;
     }
     
-    App.Instance.albumListView = new App.View.AlbumList({
-      collection: new App.Collection.Album([], {
-        artistId: artistId
-      })
-    });
-
-    $('.search-results h2').text('Albums from ' + artistName);
+    document.location.hash = "#/artist/" + artistId;
   },
   fetchCollection: function(event) {
     var bannedKeycodes = [32, 38, 40, 9, 8, 13];

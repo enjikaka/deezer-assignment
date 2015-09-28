@@ -26,10 +26,10 @@
         <!-- albumList.js controlls this div -->
         <div class="album-flow" id="albums"></div>
       </section>
-
-      <!-- trackList.js controlls this div -->
-      <div id="track-list" class="open-album"></div>
     </div>
+
+    <!-- trackList.js controlls this div -->
+    <div id="track-list" class="track-list"></div>
   </div>
 
 
@@ -43,12 +43,14 @@
 
   <!-- Backbone scripts -->
   <script src="js/app.js"></script>
+  <script src="js/router.js"></script>
   <script src="js/suggestions.js"></script>
   <script src="js/trackList.js"></script>
   <script src="js/albumList.js"></script>
 
   <!-- Template for track list -->
   <script type="text/template" id="tracklist-template">
+    <button class="material-icons" id="history-back" title="Go back">keyboard_arrow_left</button>
     <div class="top">
         <figure>
           <img src="<%= albumCover %>" alt="<%= albumName %>">

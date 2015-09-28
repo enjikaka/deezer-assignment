@@ -25,7 +25,8 @@ App.Collection.Track = Backbone.Collection.extend({
 App.View.TrackList = Backbone.View.extend({
   el: '#track-list',
   events: {
-    'click button[data-play]': 'togglePlay'
+    'click button[data-play]': 'togglePlay',
+    'click #history-back': 'goBack'
   },
   initialize: function(viewData) {
     this.audio = document.createElement('audio');
@@ -43,18 +44,19 @@ App.View.TrackList = Backbone.View.extend({
     this.$el.addClass('show');
 
     // Make the browser jump to the now visible trackview when it is out of the viewport
-    document.location.hash = '';
-    document.location.hash = '#track-list';
+    //document.location.hash = '';
+    //document.location.hash = '#track-list';
   },
-  spanClick: function(event) {
-    event.currentTarget.click();
+  goBack: function(event) {
+    this.audio.pause();
+    window.history.back();
   },
   togglePlay: function(event) {
     var button = event.target;
     var audio = this.audio;
     var icon;
 
-    if (!audio.src) {
+    if (audio.src !== event.target.dataset.play) {
       audio.src = event.target.dataset.play;
       audio.play();
     } else {
