@@ -10,5 +10,6 @@ window.App = {
       date.setSeconds(seconds);
       return date.toTimeString().replace(/.*(\d{2}:\d{2}).*/, "$1");
 		}
-	}
+	},
+	tmp: {}
 };

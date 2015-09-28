@@ -68,8 +68,7 @@ App.View.Album = Backbone.View.extend({
     'click': 'viewTrackList'
   },
   viewTrackList: function() {
-    var albumId = this.model.attributes.id;
-    document.location.hash = "#/album/" + albumId;
+    App.Instance.appRouter.navigate('/album/' + this.model.attributes.id, {trigger: true});
   },
   template: _.template('<img src="<%= cover %>" alt="<%= name %>"><figcaption><%= name %></figcaption>'),
   render: function() {
@@ -85,17 +84,18 @@ App.View.AlbumList = Backbone.View.extend({
   initialize: function(options) {
     var self = this;
     this.options = options || {};
+
     this.collection = this.options.collection;
     this.collection.fetch();
+
     this.collection.bind('add', function() {
       self.render();
       $('.search-results').addClass('show');
+      $('#audio')[0].pause();
     });
   },
   render: function() {
     this.$el.html('');
-
-    this.$el.className = 'album';
 
     this.collection.each(function(album) {
       var albumView = new App.View.Album({ model: album });
