@@ -9,8 +9,8 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <audio id="audio" autoplay></audio>
   <div class="site">
-
     <!-- suggestionList.js controlls this div -->
     <div class="search-box" id="search">
       <input type="text" id="search-input" list="suggestions" placeholder="Search for an artist...">
@@ -74,7 +74,7 @@
                 <td><%= track.position %></td>
                 <td><%= track.name %></td>
                 <td><%= track.duration %></td>
-                <td><%= track.released %></td>
+                <td><%= albumReleased %></td>
                 <td><button class="material-icons" data-play="<%= track.preview %>">play_arrow</button></td>
               </tr>
             <% }); %>
