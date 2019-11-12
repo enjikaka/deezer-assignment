@@ -1,6 +1,6 @@
 {
   "name": "deezer-assignment",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Assignment using Backbone and the Deezer API",
   "main": "index.js",
   "scripts": {
@@ -22,10 +22,4 @@
     "url": "https://github.com/enjikaka/deezer-assignment/issues"
   },
   "homepage": "https://github.com/enjikaka/deezer-assignment#readme",
-  "devDependencies": {
-    "browser-sync": "^2.9.6",
-    "gulp": "^3.9.0",
-    "gulp-autoprefixer": "^3.0.2",
-    "gulp-sass": "^2.0.4"
-  }
 }
