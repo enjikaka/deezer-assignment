@@ -4,8 +4,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
   <meta charset="utf-8">
   <title>Deezer App</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,300,100" media="not all" onload="if (media != 'all')media='all'">
-  <link rel="stylesheet" href="http://fonts.googleapis.com/icon?family=Material+Icons" media="not all" onload="if (media != 'all') media = 'all'">
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,300,100" media="not all" onload="if (media != 'all')media='all'">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons" media="not all" onload="if (media != 'all') media = 'all'">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -36,17 +36,11 @@
   <div id="dz-root"></div>
 
   <!-- Libs and their dependencies -->
-  <script src="bower_components/jquery/dist/jquery.js"></script>
-  <script src="bower_components/underscore/underscore.js"></script>
-  <script src="bower_components/backbone/backbone.js"></script>
+  <script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+  <script src="https://unpkg.com/underscore@1.9.1/underscore.js"></script>
+  <script src="https://unpkg.com/backbone@1.4.0/backbone.js"></script>
+  <script>window._Backbone = Backbone; window.Backbone = undefined;</script>
   <script src="https://cdns-files.deezer.com/js/min/dz.js"></script>
-
-  <!-- Backbone scripts -->
-  <script src="js/app.js"></script>
-  <script src="js/router.js"></script>
-  <script src="js/suggestions.js"></script>
-  <script src="js/trackList.js"></script>
-  <script src="js/albumList.js"></script>
 
   <!-- Template for track list -->
   <script type="text/template" id="tracklist-template">
@@ -81,6 +75,6 @@
         </table>
       </div>
   </script>
-  <script src="js/setup.js"></script>
+  <script src="js/setup.js" type="module"></script>
 </body>
 </html>
