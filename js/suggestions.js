@@ -1,11 +1,11 @@
-import App from './app.js';
+import { Model, Collection, View } from './backbone.js';
 import appRouter from './router.js';
 
 /*
   Handles fetching suggestions in the search bar
 */
 
-App.Model.Suggestion = Backbone.Model.extend({
+const SuggestionModel = Model.extend({
   idAttribute: "id",
   defaults: {
     id: null,
@@ -13,8 +13,8 @@ App.Model.Suggestion = Backbone.Model.extend({
   }
 });
 
-App.Collection.Suggestion = Backbone.Collection.extend({
-  model: App.Model.Suggestion,
+const SuggestionCollection = Collection.extend({
+  model: SuggestionModel,
   url: function() {
     return this.query;
   },
@@ -48,7 +48,7 @@ App.Collection.Suggestion = Backbone.Collection.extend({
   }
 });
 
-App.View.Suggestion = Backbone.View.extend({
+const SuggestionView = View.extend({
   tagName: 'option',
   template: _.template('<%= name %>'),
   render: function() {
@@ -60,7 +60,7 @@ App.View.Suggestion = Backbone.View.extend({
   }
 });
 
-App.View.Suggestions = Backbone.View.extend({
+export const SuggestionsView = View.extend({
   el: '#search',
   events: {
     'input #search-input': 'fetchCollection',
@@ -70,7 +70,7 @@ App.View.Suggestions = Backbone.View.extend({
   initialize: function(options) {
     var self = this;
     self.options = options || {};
-    self.collection = new App.Collection.Suggestion();
+    self.collection = new SuggestionCollection();
     self.collection.bind('add', function() {
       self.render();
     });
@@ -120,12 +120,10 @@ App.View.Suggestions = Backbone.View.extend({
     this.$el.find('#suggestions').html('');
 
     this.collection.each(function(suggestion) {
-      var suggestionView = new App.View.Suggestion({ model: suggestion });
+      var suggestionView = new SuggestionView({ model: suggestion });
       this.$el.find('#suggestions').append(suggestionView.render().el);
     }, this);
 
     return this;
   }
 });
-
-//App.Instance.suggestionsView;

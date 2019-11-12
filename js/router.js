@@ -1,6 +1,12 @@
-import App from './app.js';
+import { Router } from './backbone.js';
 
-export const AppRouter = Backbone.Router.extend({
+import AlbumCollection from './collections/album.js';
+import AlbumListView from './views/albumList.js';
+
+import TrackCollection from './collections/track.js';
+import TrackListView from './views/trackList.js';
+
+export const AppRouter = Router.extend({
 	routes: {
     'artist/:id': 'getAlbums',
     'album/:id': 'getAlbum'
@@ -9,14 +15,14 @@ export const AppRouter = Backbone.Router.extend({
 
 let router = new AppRouter();
 
-router.on('route:getAlbums', artistId => new App.View.AlbumList({
-  collection: new App.Collection.Album([], {
+router.on('route:getAlbums', artistId => new AlbumListView({
+  collection: new AlbumCollection([], {
     artistId
   })
 }));
 
-router.on('route:getAlbum', albumId => new App.View.TrackList({
-  collection: new App.Collection.Track([], {
+router.on('route:getAlbum', albumId => new TrackListView({
+  collection: new TrackCollection([], {
     albumId
   }),
   albumId

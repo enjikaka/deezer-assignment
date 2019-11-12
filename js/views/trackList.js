@@ -1,48 +1,8 @@
+import { View } from '../backbone.js';
+
 /*
-
   Handles listing tracks for an album
-
 */
-
-import { formatTime } from './utils.js';
-
-export const TrackModel = Backbone.Model.extend({
-  idAttribute: "id",
-  defaults: {
-    id: null,
-    name: null,
-    position: null,
-    duration: null,
-    preview: null
-  }
-});
-
-function parseDeezerTracksResponse (response) {
-  return response.data.map(item => {
-    const track = {};
-
-    track.id = item.id;
-    track.name = item.title;
-    track.position = item.track_position;
-    track.duration = formatTime(item.duration);
-    track.preview = item.preview;
-
-    return track;
-  });
-}
-
-export const TrackCollection = Backbone.Collection.extend({
-  model: TrackModel,
-  url: function() {
-    return this.albumId;
-  },
-  sync: function() {
-    DZ.api('/album/' + this.albumId + '/tracks', response => this.push(parseDeezerTracksResponse(response)));
-  },
-  initialize: function(_, settings) {
-    this.albumId = settings.albumId;
-  }
-});
 
 function parseDeezerAlbumResponse (albumResponse) {
   const albumName = albumResponse.title;
@@ -56,7 +16,7 @@ function parseDeezerAlbumResponse (albumResponse) {
   };
 }
 
-export const TrackListView = Backbone.View.extend({
+export default View.extend({
   el: '#track-list',
   initialize: function(settings) {
     this.settings = settings || {};

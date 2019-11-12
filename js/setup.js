@@ -1,6 +1,6 @@
-import App from './app.js';
+import Backbone from './backbone.js';
 import './router.js';
-import './suggestions.js';
+import { SuggestionsView } from './suggestions.js';
 
-App.Instance.suggestionsView = new App.View.Suggestions({model: new App.Model.Suggestion()});
 Backbone.history.start();
+const suggestionsView = new SuggestionsView();
