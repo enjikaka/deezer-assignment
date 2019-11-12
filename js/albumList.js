@@ -1,12 +1,8 @@
-/*
-  
-  Handles listing albums
+/* globals Backbone, $, DZ */
+import { currentTrackListView } from './app.js';
+import appRouter from './router.js';
 
-*/
-
-//var albumListView, trackListView, trackCollection;
-
-App.Model.Album = Backbone.Model.extend({
+export const AlbumModel = Backbone.Model.extend({
   idAttribute: "id",
   defaults: {
     id: null,
@@ -15,8 +11,8 @@ App.Model.Album = Backbone.Model.extend({
   }
 });
 
-App.Collection.Album = Backbone.Collection.extend({
-  model: App.Model.Album,
+export const AlbumCollection = Backbone.Collection.extend({
+  model: AlbumModel,
   url: function() {
     return this.artistId;
   },
@@ -26,16 +22,18 @@ App.Collection.Album = Backbone.Collection.extend({
     DZ.api('/artist/' + model.artistId + '/albums', function(response) {
       self.parse(response);
     });
-  },            
+  },
   initialize: function(data, settings) {
     this.artistId = settings.artistId;
+
     $('.track-list').removeClass('show');
+
     DZ.api('/artist/' + settings.artistId, function(response) {
       $('.search-results h2').text('Albums from ' + response.name);
     });
   },
   parse: function(response) {
-    var album = {};  
+    var album = {};
     var self = this;
 
     if (response.data.length < 1) {
@@ -56,13 +54,13 @@ App.Collection.Album = Backbone.Collection.extend({
   }
 });
 
-App.View.Album = Backbone.View.extend({
+export const AlbumView = Backbone.View.extend({
   tagName: 'figure',
   events: {
     'click': 'viewTrackList'
   },
-  viewTrackList: function() {
-    App.Instance.appRouter.navigate('/album/' + this.model.attributes.id, {trigger: true});
+  viewTrackList: function () {
+    appRouter.navigate('/album/' + this.model.attributes.id, {trigger: true});
   },
   template: _.template('<img src="<%= cover %>" alt="<%= name %>"><figcaption><%= name %></figcaption>'),
   render: function() {
@@ -73,20 +71,21 @@ App.View.Album = Backbone.View.extend({
   }
 });
 
-App.View.AlbumList = Backbone.View.extend({
+export const AlbumListView = Backbone.View.extend({
   el: '#albums',
   initialize: function(options) {
-    var self = this;
     this.options = options || {};
 
     this.collection = this.options.collection;
     this.collection.fetch();
 
-    this.collection.bind('add', function() {
-      self.render();
+    this.collection.bind('add', () => {
+      this.render();
+
       $('.search-results').addClass('show');
-      if (App.Instance.trackListView !== undefined) {
-        App.Instance.trackListView.pauseAudio();
+
+      if (currentTrackListView !== undefined) {
+        currentTrackListView.pauseAudio();
       }
     });
   },
@@ -94,14 +93,10 @@ App.View.AlbumList = Backbone.View.extend({
     this.$el.html('');
 
     this.collection.each(function(album) {
-      var albumView = new App.View.Album({ model: album });
+      var albumView = new AlbumView({ model: album });
       this.$el.append(albumView.render().el);
     }, this);
 
     return this;
   }
 });
-
-function getArtistIdFromName(name) {
-  return $('#search option[value="'+name+'"]').attr('label');
-}

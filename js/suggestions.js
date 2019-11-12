@@ -1,7 +1,8 @@
-/*
-  
-  Handles fetching suggestions in the search bar
+import App from './app.js';
+import appRouter from './router.js';
 
+/*
+  Handles fetching suggestions in the search bar
 */
 
 App.Model.Suggestion = Backbone.Model.extend({
@@ -24,12 +25,12 @@ App.Collection.Suggestion = Backbone.Collection.extend({
     DZ.api('/search/autocomplete?q=' + encodeURIComponent(model.query), function(response) {
       self.parse(response);
     });
-  }, 
+  },
   initialize: function() {
     this.query = '';
   },
   parse: function(response) {
-    var suggestion = {};  
+    var suggestion = {};
     var self = this;
 
     if (response.artists === undefined) {
@@ -93,7 +94,7 @@ App.View.Suggestions = Backbone.View.extend({
 
     $('.search-results').removeClass('show');
 
-    App.Instance.appRouter.navigate('/artist/' + artistId, {trigger: true});
+    appRouter.navigate('/artist/' + artistId, {trigger: true});
   },
   fetchCollection: function(event) {
     var bannedKeycodes = [32, 38, 40, 9, 8, 13];

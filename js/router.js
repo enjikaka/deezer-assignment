@@ -1,25 +1,25 @@
-App.Router.Default = Backbone.Router.extend({
+import App from './app.js';
+
+export const AppRouter = Backbone.Router.extend({
 	routes: {
     'artist/:id': 'getAlbums',
     'album/:id': 'getAlbum'
   }
 });
 
-App.Instance.appRouter = new App.Router.Default();
+let router = new AppRouter();
 
-App.Instance.appRouter.on('route:getAlbums', function(artistId) {
-  App.Instance.albumListView = new App.View.AlbumList({
-    collection: new App.Collection.Album([], {
-      artistId: artistId
-    })
-  });
-});
+router.on('route:getAlbums', artistId => new App.View.AlbumList({
+  collection: new App.Collection.Album([], {
+    artistId
+  })
+}));
 
-App.Instance.appRouter.on('route:getAlbum', function(albumId) {
-  App.Instance.trackListView = new App.View.TrackList({
-    collection: new App.Collection.Track([], {
-      albumId: albumId
-    }),
-    albumId: albumId
-  });
-});
+router.on('route:getAlbum', albumId => new App.View.TrackList({
+  collection: new App.Collection.Track([], {
+    albumId
+  }),
+  albumId
+}));
+
+export default router;
