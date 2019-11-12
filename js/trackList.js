@@ -44,33 +44,35 @@ export const TrackCollection = Backbone.Collection.extend({
   }
 });
 
+function parseDeezerAlbumResponse (albumResponse) {
+  const albumName = albumResponse.title;
+  const albumCover = albumResponse.cover_medium;
+  const albumReleased = albumResponse.release_date.split('-')[0];
+
+  return {
+    albumReleased,
+    albumName,
+    albumCover,
+  };
+}
+
 export const TrackListView = Backbone.View.extend({
   el: '#track-list',
   initialize: function(settings) {
-    var self = this;
-
     this.settings = settings || {};
     this.audio = $('#audio')[0];
     this.collection = this.settings.collection;
     this.collection.fetch();
 
-    this.collection.bind('add', function() {
+    this.collection.bind('add', () => {
       $('.search-results').removeClass('show');
 
       // Fetch information about the album to get the release year
-      DZ.api('/album/' + settings.albumId, function(response) {
-        const albumName = response.title;
-        const albumCover = response.cover_medium;
-        const albumReleased = response.release_date.split('-')[0];
-
-        const viewData = {
-          albumReleased,
-          albumName,
-          albumCover,
-          tracks: self.collection.toJSON()
-        };
-
-        self.render(viewData);
+      DZ.api('/album/' + settings.albumId, response => {
+        this.render({
+          ...parseDeezerAlbumResponse(response),
+          tracks: this.collection.toJSON()
+        });
       });
     });
   },
@@ -98,6 +100,7 @@ export const TrackListView = Backbone.View.extend({
   },
   pauseAudio: function() {
     this.audio.pause();
+
     $('#track-list button[data-preview]').each(function() {
       if (!$(this).attr('disabled')) {
         $(this).html('play_arrow');
