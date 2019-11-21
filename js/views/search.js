@@ -1,9 +1,19 @@
 /* globals $, DZ */
 import { View } from '../backbone.js';
+import { html, render } from 'https://unpkg.com/lit-html@1.1.2/lit-html.js';
+
 import SuggestionCollection from '../collections/suggestion.js';
 import appRouter from '../router.js';
 
-import SuggestionView from './suggestion.js';
+const suggestionTemplate = ({ name, id }) => html`
+  <option data-id="${id}" value="${name}">
+`;
+
+const template = suggestions => html`
+  <input type="text" id="search-input" list="suggestions" placeholder="Search for an artist...">
+  <datalist id="suggestions">${suggestions.map(suggestionTemplate)}</datalist>
+  <button>Search</button>
+`;
 
 export default View.extend({
   el: '#search',
@@ -12,11 +22,14 @@ export default View.extend({
     'keyup #search-input': 'search',
     'click button': 'search'
   },
+  template,
   collection: new SuggestionCollection(),
   initialize (options) {
     this.options = options || {};
 
     this.collection.bind('add', () => this.render());
+
+    this.render();
   },
   search (event) {
     const artistName = $('#search input').val();
@@ -51,13 +64,7 @@ export default View.extend({
     this.collection.fetch();
   },
   render () {
-    this.$el.find('#suggestions').html('');
-
-    this.collection.each(function(suggestion) {
-      const suggestionView = new SuggestionView({ model: suggestion });
-
-      this.$el.find('#suggestions').append(suggestionView.render().el);
-    }, this);
+    render(this.template(this.collection.map(s => s.toJSON())), this.$el[0]);
 
     return this;
   }

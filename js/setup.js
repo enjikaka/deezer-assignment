@@ -1,8 +1,8 @@
 import Backbone from './backbone.js';
 import './router.js';
 
-import SuggestionsView from './views/suggestions.js';
+import SearchView from './views/search.js';
 
 Backbone.history.start();
 
-new SuggestionsView();
+new SearchView();
