@@ -4,7 +4,7 @@ import AlbumView from './album.js'
 
 export default View.extend({
   el: '#albums',
-  initialize: function(options = {}) {
+  initialize (options = {}) {
     this.options = options;
 
     this.collection = this.options.collection;
@@ -16,7 +16,7 @@ export default View.extend({
       $('.search-results').addClass('show');
     });
   },
-  render: function() {
+  render () {
     while (this.el.firstChild) {
       this.el.firstChild.remove();
     }

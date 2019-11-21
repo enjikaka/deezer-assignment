@@ -12,11 +12,11 @@ export default View.extend({
   events: {
     'click': 'viewTrackList'
   },
-  viewTrackList: function () {
+  viewTrackList () {
     appRouter.navigate('/album/' + this.model.attributes.id, { trigger: true });
   },
   template,
-  render: function () {
+  render () {
     render(
       this.template(this.model.toJSON()),
       this.$el[0]
